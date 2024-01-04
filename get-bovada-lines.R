@@ -1,3 +1,11 @@
+# Install libraries if not installed
+{
+  list.of.packages <- c("jsonlite",
+                        "dplyr")
+  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+  if(length(new.packages)) install.packages(new.packages)
+}
+
 library(dplyr)
 library(jsonlite)
 url <- "https://www.bovada.lv/services/sports/event/coupon/events/A/description/hockey?marketFilterId=def&preMatchOnly=true&eventsLimit=50&lang=en"
@@ -33,12 +41,11 @@ line_scrape <- function(game_links) {
     
   }
   
-  outlist <- outlist[!sapply(outlist,is.null)]
+  outlist = outlist[!sapply(outlist,is.null)]
   dplyr::bind_rows(outlist)
   
 }
 
 games
 output_list <- lapply(games[2:length(games)], line_scrape)
-
 output <- dplyr::bind_rows(output_list)
